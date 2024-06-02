@@ -47,4 +47,25 @@ export const bookController = {
     const book = await Book.findById(id);
     return res.json(book);
   },
+
+  updateData: async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    try {
+      // Logic to update book based on bookId
+      const updateBook = await Book.findByIdAndUpdate(
+        id,
+        { isAvailable: false },
+        { new: true } // This option returns the updated document
+      );
+
+      if (!updateBook) {
+        return res.status(404).json({ message: "Book not found" });
+      }
+
+      return res.json(updateBook);
+    } catch (error) {
+      return res.status(500).json({ message: "Error updating book", error });
+    }
+  },
 };

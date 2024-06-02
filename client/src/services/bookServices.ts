@@ -8,12 +8,18 @@ export const bookServices = {
     const data = (await res.json()) as IBook[];
     return data;
   },
-  getSingleData: async (id: string) => {
+  getSingleData: async (id: string): Promise<IBook> => {
     const res = await fetch(`${API_URL}/books/${id}`);
     const data = (await res.json()) as IBook;
     return data;
   },
-  createData: async ({ name, description, isbn, author, file }: IBook) => {
+  createData: async ({
+    name,
+    description,
+    isbn,
+    author,
+    file,
+  }: IBook): Promise<IBook> => {
     if (!name || !description || !isbn || !author || !file) {
       throw new Error("All fields must be filled");
     }
@@ -24,12 +30,22 @@ export const bookServices = {
     formData.append("author", author);
     formData.append("file", file[0]);
 
-    const res = await fetch("http://localhost:8080/books", {
+    const res = await fetch(`${API_URL}/books`, {
       method: "POST",
-      // headers: { "Content-Type": "application/json" },
       body: formData,
     });
 
+    const data = (await res.json()) as IBook;
+    return data;
+  },
+  updateData: async (id: string): Promise<IBook> => {
+    const res = await fetch(`${API_URL}/books/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        /* update fields here */
+      }),
+    });
     const data = (await res.json()) as IBook;
     return data;
   },

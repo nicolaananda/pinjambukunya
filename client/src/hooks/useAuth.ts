@@ -1,13 +1,20 @@
 import API_URL from "@/config/apiUrl";
-import { useState } from "react";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { useAtom } from "jotai";
+import { userAtom } from "@/context/user";
+import { useNavigate } from "react-router-dom";
 
 interface useAuthProps {
   name?: string;
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
 }
 
 export const useAuth = ({ name, email, password }: useAuthProps) => {
+  const navigate = useNavigate();
+  const [user, setUser] = useAtom(userAtom);
+
   const [message, setMessage] = useState<string | null>(null);
 
   async function handleLogin() {
@@ -25,9 +32,17 @@ export const useAuth = ({ name, email, password }: useAuthProps) => {
       }
       console.log(data);
       setMessage("Login successful");
-      return data;
-    } catch (error) {
-      setMessage(error.message);
+
+      // cookies and local storage
+      localStorage.setItem("user", JSON.stringify(data.user));
+      Cookies.set("token", data.token, { expires: 1 });
+      setUser(data.token);
+      navigate("/", { replace: true });
+
+      // return data;
+    } catch (error: any) {
+      // Added type annotation for error
+      setMessage(error.message || "Login failed");
       console.error(error);
       return null;
     }
@@ -41,22 +56,28 @@ export const useAuth = ({ name, email, password }: useAuthProps) => {
         body: JSON.stringify({ name, email, password }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        throw new Error("Registration failed");
+        throw new Error(data.message || "Registration failed");
       }
 
-      const data = await res.json();
       setMessage("Registration successful");
       return data;
-    } catch (error) {
-      setMessage("Registration failed");
+    } catch (error: any) {
+      // Added type annotation for error
+      setMessage(error.message || "Registration failed");
       console.error(error);
+      return null;
     }
   }
+
+  useEffect(() => {}, []);
 
   return {
     handleLogin,
     handleRegister,
     message,
+    user,
   };
 };

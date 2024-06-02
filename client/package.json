@@ -11,8 +11,12 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",
+    "boring-avatars": "^1.10.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
+    "jotai": "^2.8.2",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.379.0",
     "next-themes": "^0.3.0",
     "react": "^18.2.0",
@@ -24,6 +28,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20.12.12",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",

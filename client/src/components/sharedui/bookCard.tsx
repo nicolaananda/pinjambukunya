@@ -17,11 +17,13 @@ export const BookCard = ({ book }: { book: IBook }) => {
             <h3 className="text-lg font-semibold">{book.name}</h3>
             <p className="text-sm text-gray-700">{book.author}</p>
             <div className="p-1"></div>
-            <Link to={`/${book._id}`}>
-              <Button size="sm" variant="outline" className="shadow">
-                Pinjam
-              </Button>
-            </Link>
+            <div>
+              <Link to={`/${book._id}`}>
+                <Button size="sm" variant="outline" className="shadow">
+                  Pinjam
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
